@@ -1,16 +1,20 @@
 import { Module } from '@nestjs/common';
 import { CategoryModule } from './category/category.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      envFilePath: '.development.env',
+    }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      username: 'root',
-      password: '123456',
-      host: 'localhost',
-      port: 3306,
-      database: 'makecodes',
+      username: process.env.DB_NAME,
+      password: process.env.DB_PASSWORD,
+      host: process.env.DB_HOST,
+      port: Number(process.env.DB_PROT),
+      database: process.env.DB_DATABASE,
       // 自动根据实体类字段生成数据库字段
       synchronize: true,
       // 自动加载实体类
@@ -18,6 +22,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       // 数据库时区
       timezone: 'Z',
     }),
+
     CategoryModule,
   ],
   controllers: [],
