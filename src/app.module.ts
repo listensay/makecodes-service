@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
-import { CategoryModule } from './category/category.module';
+import { CategoryModule } from './modules/category/category.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
+import { UserModule } from './modules/user/user.module';
 
 @Module({
   imports: [
@@ -22,8 +23,8 @@ import { ConfigModule } from '@nestjs/config';
       // 数据库时区
       timezone: 'Z',
     }),
-
     CategoryModule,
+    UserModule,
   ],
   controllers: [],
   providers: [],
