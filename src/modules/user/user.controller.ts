@@ -18,11 +18,19 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @ApiOperation({
-    summary: '新增用户',
+    summary: '注册用户',
   })
-  @Post()
+  @Post('register')
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
+  }
+
+  @ApiOperation({
+    summary: '登录',
+  })
+  @Post('login')
+  login(@Body() user: CreateUserDto) {
+    return this.userService.login(user);
   }
 
   @ApiOperation({
