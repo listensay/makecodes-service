@@ -13,16 +13,23 @@ export class User {
   @Column()
   username: string;
 
-  @Column()
+  @Column({
+    select: false,
+  })
   password: string;
 
   @Column()
   avatar: string;
 
-  @Column('int', { default: () => 0 })
-  isDelete: string;
+  @Column({
+    select: false,
+    default: 0,
+  })
+  isDelete: number;
 
-  @Column('datetime', { default: () => 'CURRENT_TIMESTAMP' })
+  @Column({
+    default: () => 'CURRENT_TIMESTAMP',
+  })
   created_at: Date;
 
   @UpdateDateColumn()

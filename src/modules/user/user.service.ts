@@ -4,7 +4,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
-import { hashPassword, isOk } from 'src/common/utils/bcryptjs';
+import { hashPassword } from 'src/common/utils/bcryptjs';
 import { ResponseData } from 'src/common/utils/response';
 
 @Injectable()
@@ -34,8 +34,15 @@ export class UserService {
     return ResponseData.ok();
   }
 
-  findAll() {
-    return `This action returns all user`;
+  async findAll() {
+    const users = await this.user.find();
+    // 过滤掉密码字段
+    const safeUsers = users.map((user) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password, ...rest } = user;
+      return rest;
+    });
+    return ResponseData.ok(safeUsers);
   }
 
   async findOne(username: string) {
@@ -52,22 +59,5 @@ export class UserService {
 
   remove(id: number) {
     return `This action removes a #${id} user`;
-  }
-
-  async login(user: CreateUserDto) {
-    const { username, password } = user;
-
-    const userInfo = await this.findOne(username);
-
-    if (!userInfo) {
-      return ResponseData.fail(400, '用户不存在');
-    }
-    const isPasswordValid = isOk(password, userInfo.password);
-
-    if (!isPasswordValid) {
-      return ResponseData.fail(400, '密码错误');
-    }
-
-    return ResponseData.ok();
   }
 }

@@ -6,11 +6,13 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @ApiTags('用户')
 @Controller('user')
@@ -26,16 +28,9 @@ export class UserController {
   }
 
   @ApiOperation({
-    summary: '登录',
-  })
-  @Post('login')
-  login(@Body() user: CreateUserDto) {
-    return this.userService.login(user);
-  }
-
-  @ApiOperation({
     summary: '获取用户列表',
   })
+  @UseGuards(JwtAuthGuard)
   @Get()
   findAll() {
     return this.userService.findAll();
@@ -44,7 +39,8 @@ export class UserController {
   @ApiOperation({
     summary: '获取用户详情',
   })
-  @Get(':usernme')
+  @UseGuards(JwtAuthGuard)
+  @Get(':username')
   findOne(@Param('username') username: string) {
     return this.userService.findOne(username);
   }
@@ -52,6 +48,7 @@ export class UserController {
   @ApiOperation({
     summary: '修改用户',
   })
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(+id, updateUserDto);
@@ -60,6 +57,7 @@ export class UserController {
   @ApiOperation({
     summary: '删除用户',
   })
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.userService.remove(+id);
