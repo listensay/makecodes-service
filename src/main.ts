@@ -20,6 +20,11 @@ async function bootstrap() {
   // 注册全局异常过滤器
   app.useGlobalFilters(new HttpExceptionFilter());
 
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(process.env.PORT ?? 8000);
+
+  console.log(
+    `\n\n后端服务已启动: http://localhost:${process.env.PORT ?? 8000}`,
+  );
+  console.log(`文档地址: http://localhost:${process.env.PORT ?? 8000}/api`);
 }
 bootstrap();
